@@ -17,14 +17,11 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            EnsureFrontendRequestsAreStateful::class,
             SubstituteBindings::class,
         ],
 
         'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
             EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             SubstituteBindings::class,
@@ -33,9 +30,9 @@ class Kernel extends HttpKernel
 
     protected $middlewareAliases = [
         'auth' => Authenticate::class,
+        'auth:sanctum' => EnsureFrontendRequestsAreStateful::class,
         'bindings' => SubstituteBindings::class,
         'throttle' => ThrottleRequests::class,
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        'jabatan' => \App\Http\Middleware\JabatanMiddleware::class,
     ];
 }

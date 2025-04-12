@@ -58,6 +58,7 @@
 
 
 
+        @php use Illuminate\Support\Facades\Storage; @endphp
         <!-- Tabel Absensi -->
         <div class="table-responsive shadow rounded">
             <table class="table table-bordered table-hover align-middle">
@@ -166,7 +167,7 @@
                                                                 <div class="mb-3 text-center">
                                                                     <img src="{{ asset($fotoAbsen) }}"
                                                                         class="img-fluid rounded shadow"
-                                                                        style="max-height: 250px;" alt="Selfie Absen">
+                                                                        style="max-height: 150px;" alt="Selfie Absen">
                                                                 </div>
                                                             @else
                                                                 <p class="text-muted">Foto tidak tersedia.</p>
@@ -186,7 +187,7 @@
                                                                 <div class="mb-3 text-center">
                                                                     <img src="{{ asset($fotoPulang) }}"
                                                                         class="img-fluid rounded shadow"
-                                                                        style="max-height: 250px;" alt="Selfie Pulang">
+                                                                        style="max-height: 150px;" alt="Selfie Pulang">
                                                                 </div>
                                                             @else
                                                                 <p class="text-muted">Foto tidak tersedia.</p>

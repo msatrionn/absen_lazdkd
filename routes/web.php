@@ -15,16 +15,17 @@ use App\Models\User;
 
 
 
-Route::get('/login', [AuthController::class, 'index']);
+Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
 Route::get('/register', [AuthController::class, 'index_register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-
-Route::middleware(['web'])->group(function () {
-    // AUTH
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::middleware(['auth', 'jabatan:1'])->group(function () {
+    //Riwayat ABSEN
+    Route::get('/dashboard/riwayat-absen', [AbsenController::class, 'dashboardAbsen'])->name('absen.dashboardAbsen');
+    Route::get('/dashboard/riwayat-absen-data', [AbsenController::class, 'getHistoryAbsen'])->name('absen.getHistoryAbsen');
 
     // JABATAN
+    Route::get('/dashboard', [AbsenController::class, 'dashboard'])->name('absen.dashboard');
     Route::get('/dashboard/jabatan', [JabatanController::class, 'index'])->name('jabatan.index');
     Route::get('/dashboard/jabatan/data', [JabatanController::class, 'getData'])->name('jabatan.data');
     Route::post('/dashboard/jabatan', [JabatanController::class, 'store'])->name('jabatan.store');
@@ -32,7 +33,7 @@ Route::middleware(['web'])->group(function () {
     Route::put('/dashboard/jabatan/{id}', [JabatanController::class, 'update'])->name('jabatan.update');
     Route::delete('/dashboard/jabatan/{id}', [JabatanController::class, 'destroy'])->name('jabatan.destroy');
     Route::get('/jabatan/list', function () {
-        return response()->json(Jabatan::select('id', 'nama_jabatan')->get());
+        return response()->json(Jabatan::select('id', 'nama_jabatan')->where('id', '!=', 1)->get());
     })->name('jabatan.list');
 
     // JADWAL
@@ -54,6 +55,12 @@ Route::middleware(['web'])->group(function () {
     Route::get('/dashboard/staff/{id}/edit', [StaffController::class, 'edit'])->name('staff.edit');
     Route::put('/dashboard/staff/{id}', [StaffController::class, 'update'])->name('staff.update');
     Route::delete('/dashboard/staff/{id}', [StaffController::class, 'destroy'])->name('staff.destroy');
+});
+
+Route::middleware(['web'])->group(function () {
+    // AUTH
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
     // ABSEN
     Route::get('/', [AbsenController::class, 'index'])->name('home.absen')->middleware('auth');
     Route::get('/history', [AbsenController::class, 'showHistory'])->name('absen.showHistory')->middleware('auth');

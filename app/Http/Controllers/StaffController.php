@@ -15,7 +15,7 @@ class StaffController extends Controller
 
     public function getData()
     {
-        $staff = Staff::with(['jabatan', 'user'])->select([
+        $staff = Staff::with(['jabatan', 'user'])->where('id', '!=', 1)->select([
             'id',
             'nip',
             'nama',

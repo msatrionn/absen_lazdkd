@@ -190,6 +190,13 @@
             color: #333;
         }
 
+        .logout-container {
+            width: 100%;
+            display: flex;
+            justify-content: end;
+        }
+
+
         @media (max-width: 576px) {
             .attendance-container {
                 padding: 10px;
@@ -231,6 +238,15 @@
     <div class="main-container">
         <div class="container attendance-container">
             <div class="attendance-card">
+                <div class="logout-container">
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button class="btn btn-sm btn-outline-danger" type="submit">
+                            <i class="fas fa-sign-out-alt fa-sm me-2 "></i> Logout
+                        </button>
+                    </form>
+                </div>
+
                 <div class="header-text">ABSEN</div>
 
                 <!-- Map -->
@@ -524,7 +540,6 @@
             $('#confirmSubmit').click(function() {
                 // Prepare data to send
                 const formData = {
-                    id_staff: 1, // Anda bisa mengganti ini dengan ID staff yang sesuai
                     status_absen: currentAttendanceType,
                     photo: capturedPhoto,
                     nama_lokasi: $('#nama_lokasi').text(),

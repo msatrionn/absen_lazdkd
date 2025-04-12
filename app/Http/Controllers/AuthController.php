@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jabatan;
+use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,28 +19,47 @@ class AuthController extends Controller
     }
     public function index_register(Request $request)
     {
-        return view('register');
+        $jabatans = Jabatan::where('id', '!=', 1)->get();
+        return view('register', compact('jabatans'));
     }
     public function register(Request $request)
     {
         $request->validate([
+            // Validasi User
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:16|unique:users',
             'password' => 'required|string|min:6|confirmed',
+
+            // Validasi Staff
+            'nip' => 'required|string|unique:staff,nip|max:255',
+            'nama' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|in:L,P',
+            'alamat' => 'required|string',
+            'telp' => 'required|string|max:15',
+            'id_jabatan' => 'required|exists:jabatan,id',
         ]);
 
+        // Buat user
         $user = User::create([
             'name' => $request->name,
             'username' => $request->username,
             'password' => Hash::make($request->password),
         ]);
 
+        // Buat staff (relasi ke user)
+        Staff::create([
+            'nip' => $request->nip,
+            'nama' => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'alamat' => $request->alamat,
+            'telp' => $request->telp,
+            'id_jabatan' => $request->id_jabatan,
+            'id_user' => $user->id,
+        ]);
+
         Auth::login($user);
 
-        return response()->json([
-            'message' => 'Registrasi berhasil!',
-            'user' => $user,
-        ], 201);
+        return redirect('/');
     }
 
     // LOGIN
@@ -68,8 +89,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate(); // Hapus sesi
         $request->session()->regenerateToken(); // Regenerasi token CSRF
-        return response()->json([
-            'message' => 'Logout berhasil!',
-        ]);
+        return redirect('/login');
     }
 }
