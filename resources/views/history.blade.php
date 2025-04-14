@@ -70,7 +70,7 @@
                         <th style="width: 180px">Absen Masuk</th>
                         <th>Jadwal Pulang</th>
                         <th>Absen Pulang</th>
-                        <th style="width: 180px">Absen Pulang</th>
+                        <th style="width: 180px">Status Masuk</th>
                         <th>Status Pulang</th>
                         <th>Detail</th>
 
