@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Absensi LAZDKD</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -48,10 +48,11 @@
                     <table class="table table-bordered" id="jadwalTable">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>User</th>
                                 <th>Jam Masuk</th>
                                 <th>Jam Keluar</th>
+                                <th>Flexible</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -86,6 +87,11 @@
                                         </select>
                                         <small class="text-danger" id="error-id_user"></small>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="is_flexible">Flexible</label>
+                                        <input type="checkbox" id="is_flexible" class="form-control" value="1">
+                                    </div>
+
                                 </div>
 
                                 <div class="modal-footer">
@@ -146,8 +152,13 @@
                 serverSide: true,
                 ajax: "{{ route('jadwal.data') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: null,
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
                     },
                     {
                         data: 'nama',
@@ -162,12 +173,21 @@
                         name: 'jam_keluar'
                     },
                     {
+                        data: 'is_flexible',
+                        name: 'is_flexible',
+                        render: function(data) {
+                            return data == 1 ? 'Ya' :
+                                'Tidak';
+                        }
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
                     }
                 ]
+
             });
             $.get("{{ route('user.list') }}", function(data) {
                 let options = '';
@@ -198,11 +218,11 @@
                     $('#jadwal_id').val(data.id);
                     $('#jam_masuk').val(data.jam_masuk);
                     $('#jam_keluar').val(data.jam_keluar);
+                    $('#is_flexible').prop('checked', data.is_flexible == 1);
                     $('#jadwalModalLabel').text('Edit Jadwal');
                     $('#jadwalModal').modal('show');
                 });
             });
-
             $('#jadwalForm').submit(function(e) {
                 e.preventDefault();
                 let id = $('#jadwal_id').val();
@@ -212,6 +232,7 @@
                 let formData = {
                     jam_masuk: $('#jam_masuk').val(),
                     jam_keluar: $('#jam_keluar').val(),
+                    is_flexible: $('#is_flexible').prop('checked') ? 1 : 0, // Menambahkan is_flexible
                     _token: "{{ csrf_token() }}"
                 };
 
@@ -229,7 +250,13 @@
                     success: function(response) {
                         $('#jadwalModal').modal('hide');
                         table.ajax.reload();
-                        alert(response.success);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.success,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
                     },
                     error: function(xhr) {
                         $('#error-jam_masuk').text('');
@@ -254,6 +281,7 @@
                 });
 
             });
+
 
             $('#jadwalTable').on('click', '.edit', function() {
                 let id = $(this).data('id');

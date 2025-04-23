@@ -16,9 +16,9 @@ use App\Models\User;
 
 
 Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
-Route::get('/register', [AuthController::class, 'index_register']);
+// Route::get('/register', [AuthController::class, 'index_register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+// Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::middleware(['auth', 'jabatan:1'])->group(function () {
     //Riwayat ABSEN
     Route::get('/dashboard/riwayat-absen', [AbsenController::class, 'dashboardAbsen'])->name('absen.dashboardAbsen');
@@ -55,6 +55,7 @@ Route::middleware(['auth', 'jabatan:1'])->group(function () {
     Route::get('/dashboard/staff/{id}/edit', [StaffController::class, 'edit'])->name('staff.edit');
     Route::put('/dashboard/staff/{id}', [StaffController::class, 'update'])->name('staff.update');
     Route::delete('/dashboard/staff/{id}', [StaffController::class, 'destroy'])->name('staff.destroy');
+    Route::post('/dashboard/change-password/{id}', [StaffController::class, 'changePassword'])->name('staff.change-password');
 });
 
 Route::middleware(['web'])->group(function () {

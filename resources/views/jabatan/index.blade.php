@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Absensi LAZDKD</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -42,7 +42,7 @@
                     <table class="table table-bordered" id="jabatanTable">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>Nama Jabatan</th>
                                 <th>Aksi</th>
                             </tr>
@@ -127,8 +127,13 @@
                 serverSide: true,
                 ajax: "{{ route('jabatan.data') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: null,
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
                     },
                     {
                         data: 'nama_jabatan',
@@ -186,7 +191,13 @@
                     success: function(response) {
                         $('#jabatanModal').modal('hide');
                         table.ajax.reload();
-                        alert(response.success);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.success,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
                     },
                     error: function(xhr) {
                         alert('Terjadi kesalahan, silakan coba lagi.');
@@ -208,7 +219,13 @@
                         },
                         success: function(response) {
                             table.ajax.reload();
-                            alert(response.success);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: response.success,
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
                         },
                         error: function(xhr) {
                             alert('Terjadi kesalahan, silakan coba lagi.');

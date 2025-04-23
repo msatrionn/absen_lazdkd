@@ -16,7 +16,7 @@ class JadwalController extends Controller
 
     public function getData()
     {
-        $jadwal = Jadwal::leftJoin('users', 'users.id', '=', 'jadwal.id_user')->leftJoin('staff', 'staff.id_user', '=', 'users.id')->select(['jadwal.id', 'jadwal.jam_masuk', 'jadwal.jam_keluar', 'staff.nama']);
+        $jadwal = Jadwal::leftJoin('users', 'users.id', '=', 'jadwal.id_user')->leftJoin('staff', 'staff.id_user', '=', 'users.id')->select(['jadwal.is_flexible', 'jadwal.id', 'jadwal.jam_masuk', 'jadwal.jam_keluar', 'staff.nama']);
         return DataTables::of($jadwal)
             ->addColumn('action', function ($jadwal) {
                 return '
@@ -44,7 +44,8 @@ class JadwalController extends Controller
         Jadwal::create([
             'id_user' => $request->id_user,
             'jam_masuk' => $request->jam_masuk,
-            'jam_keluar' => $request->jam_keluar
+            'jam_keluar' => $request->jam_keluar,
+            'is_flexible' => $request->is_flexible
         ]);
 
         return response()->json(['success' => 'Jadwal berhasil ditambahkan']);
@@ -58,10 +59,10 @@ class JadwalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate(['jam_masuk' => 'required', 'jam_keluar' => 'required']);
-
         Jadwal::where('id', $id)->update([
             'jam_masuk' => $request->jam_masuk,
-            'jam_keluar' => $request->jam_keluar
+            'jam_keluar' => $request->jam_keluar,
+            'is_flexible' => $request->is_flexible,
         ]);
 
         return response()->json(['success' => 'Jadwal berhasil diperbarui']);

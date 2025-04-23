@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
+use function PHPUnit\Framework\isNull;
+
 class AbsenController extends Controller
 {
     /**
@@ -21,7 +23,38 @@ class AbsenController extends Controller
      */
     public function index()
     {
-        return view('/absensi');
+        $cekJadwal = Jadwal::where('id_user', 1)->first();
+        $cekAbsenMasuk = Absensi::join('staff', 'staff.id', 'absensi.id_staff')
+            ->join('users', 'users.id', 'staff.id_user')
+            ->join('absensi_detail', 'absensi_detail.id_absen', 'absensi.id')
+            ->where('absensi.id_staff', 1)
+            ->where('absensi_detail.status_absen', 'masuk')
+            ->whereDate('absensi_detail.created_at', Carbon::now())
+            ->first();
+        $cekAbsenKeluar = Absensi::join('staff', 'staff.id', 'absensi.id_staff')
+            ->join('users', 'users.id', 'staff.id_user')
+            ->join('absensi_detail', 'absensi_detail.id_absen', 'absensi.id')
+            ->where('absensi.id_staff', 1)
+            ->where('absensi_detail.status_absen', 'pulang')
+            ->whereDate('absensi_detail.created_at', Carbon::now())
+            ->first();
+        $flexibleMasuk = true;
+        $flexiblePulang = true;
+        if ($cekJadwal->is_flexible == 0 && is_null($cekAbsenMasuk)) {
+            $flexibleMasuk = true;
+        } else if ($cekJadwal->is_flexible == 0 && $cekAbsenMasuk) {
+            $flexibleMasuk = false;
+        } else if ($cekJadwal->is_flexible == 1) {
+            $flexibleMasuk = true;
+        }
+        if ($cekJadwal->is_flexible == 0 && is_null($cekAbsenKeluar)) {
+            $flexiblePulang = true;
+        } else if ($cekJadwal->is_flexible == 0 && $cekAbsenKeluar) {
+            $flexiblePulang = false;
+        } else if ($cekJadwal->is_flexible == 1) {
+            $flexiblePulang = true;
+        }
+        return view('/absensi', compact('flexibleMasuk', 'flexiblePulang'));
     }
 
     public function dashboard()

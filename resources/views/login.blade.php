@@ -37,7 +37,7 @@
                 <p>Silakan <a href="{{ route('login') }}">login</a> terlebih dahulu.</p>
             @endif --}}
             <button type="submit" class="btn btn-primary w-100">Login</button>
-            <p class="text-center mt-3"><a href="{{ route('register') }}">Belum punya akun? Register</a></p>
+            {{-- <p class="text-center mt-3"><a href="{{ route('register') }}">Belum punya akun? Register</a></p> --}}
         </form>
     </div>
 </body>

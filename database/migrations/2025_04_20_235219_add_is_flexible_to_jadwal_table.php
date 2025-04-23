@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddIsFlexibleToJadwalTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('jadwal', function (Blueprint $table) {
+            $table->boolean('is_flexible')->default(false)->after('jam_keluar'); // Ganti 'kolom_terakhir' dengan nama kolom terakhir di tabel jadwal
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('jadwal', function (Blueprint $table) {
+            $table->dropColumn('is_flexible');
+        });
+    }
+}

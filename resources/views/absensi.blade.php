@@ -270,11 +270,14 @@
                     <div class="time-display" id="currentTime">07:21:34</div>
                     <div class="date-display" id="currentDate">1 Januari 2025</div>
 
-                    <button class="btn btn-success btn-attendance" id="clockInBtn">
+                    <button class="btn btn-success btn-attendance" id="clockInBtn"
+                        {{ $flexibleMasuk == 0 ? 'disabled' : '' }}>
                         <i class="fas fa-sign-in-alt me-2"></i>ABSEN MASUK
                     </button>
 
-                    <button class="btn btn-danger btn-attendance" id="clockOutBtn">
+
+                    <button class="btn btn-danger btn-attendance" id="clockOutBtn"
+                        {{ $flexiblePulang == 0 ? 'disabled' : '' }}>
                         <i class="fas fa-sign-out-alt me-2"></i>ABSEN PULANG
                     </button>
 
@@ -550,7 +553,7 @@
 
                 // Send data to server
                 $.ajax({
-                    url: "{{ route('absensi.store') }}", // Ganti dengan endpoint Anda
+                    url: "{{ route('absensi.store') }}",
                     type: "POST",
                     headers: {
                         "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")

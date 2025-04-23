@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Absensi LAZDKD</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -37,7 +37,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container">
-                    <h2 class="mb-4">Riwayat ABsen</h2>
+                    <h2 class="mb-4">Riwayat Absen</h2>
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <label for="startDate">Dari Tanggal</label>
